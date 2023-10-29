@@ -1,6 +1,3 @@
--- This file can be loaded by calling `lua require('plugins')` from your init.vim
-
--- Only required if you have packer configured as `opt`
 vim.cmd [[packadd packer.nvim]]
 
 return require('packer').startup(function(use)
@@ -8,9 +5,7 @@ return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
   use {
-	  'nvim-telescope/telescope.nvim', tag = '0.1.1',
-	  -- or                            , branch = '0.1.x',
-	  requires = { {'nvim-lua/plenary.nvim'} }
+	  'nvim-telescope/telescope.nvim',
   }
   use({
 	  'rose-pine/neovim',
@@ -21,9 +16,57 @@ return require('packer').startup(function(use)
 	  end
   })
 
-  use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
+  use {
+      'nvim-treesitter/nvim-treesitter',
+      run = function()
+          local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+          ts_update()
+      end,
+      requires = { {'nvim-lua/plenary.nvim'} }
+  }
 
-  use('nvim-treesitter/playground')
+  -- use {
+  --     "danymat/neogen",
+  --     config = function()
+  --         require('neogen').setup {
+  --             languages = {
+  --                 sh = {
+  --                     template = {
+  --                         annotation_convention = "google_bash"
+  --                     }
+  --                 },
+  --                 php = {
+  --                     template = {
+  --                         annotation_convention = "phpdoc"
+  --                     }
+  --                 },
+  --                 javascript = {
+  --                     template = {
+  --                         annotation_convention = "jsdoc"
+  --                     }
+  --                 },
+  --                 typescript = {
+  --                     template = {
+  --                         annotation_convention = "jsdoc"
+  --                     }
+  --                 },
+  --                 python = {
+  --                     template = {
+  --                         annotation_convention = "google_docstrings"
+  --                     }
+  --                 },
+  --                 lua = {
+  --                     template = {
+  --                         annotation_convention = "emmylua"
+  --                     }
+  --                 },
+  --             }
+  --         }
+  --     end,
+  --     -- requires = "nvim-treesitter/nvim-treesitter",
+  --     -- Uncomment next line if you want to follow only stable versions
+  --     -- tag = "*"
+  -- }
 
   use('theprimeagen/harpoon')
   use('mbbill/undotree')

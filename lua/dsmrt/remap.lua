@@ -1,6 +1,9 @@
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
+local opts = { noremap = true, silent = true }
+-- vim.api.nvim_set_keymap("n", "<leader>db", ":lua require('neogen').generate()<CR>", opts)
+
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
