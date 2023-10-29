@@ -1,6 +1,6 @@
 vim.g.mapleader = " "
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
-vim.keymap.set("n", "<leader>t", vim.cmd.NvimTreeToggle)
+-- vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>pv", vim.cmd.NvimTreeToggle)
 
 local opts = { noremap = true, silent = true }
 -- vim.api.nvim_set_keymap("n", "<leader>db", ":lua require('neogen').generate()<CR>", opts)
