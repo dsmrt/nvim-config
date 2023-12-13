@@ -7,6 +7,14 @@ return require('packer').startup(function(use)
   use {
 	  'nvim-telescope/telescope.nvim',
   }
+
+  use({
+      "stevearc/conform.nvim",
+      config = function()
+          require("conform").setup()
+      end,
+  }) 
+
   use({
 	  'rose-pine/neovim',
 	  as = 'rose-pine',
@@ -77,8 +85,10 @@ return require('packer').startup(function(use)
   -- }
 
   use('theprimeagen/harpoon')
+  use('theprimeagen/git-worktree.nvim')
   use('mbbill/undotree')
   use('tpope/vim-fugitive')
+  use('tpope/vim-surround')
   use('lewis6991/gitsigns.nvim')
   use {
 	  'VonHeikemen/lsp-zero.nvim',
