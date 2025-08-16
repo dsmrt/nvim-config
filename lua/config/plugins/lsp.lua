@@ -17,10 +17,14 @@ return {
     config = function()
       local capabilities = require('blink.cmp').get_lsp_capabilities()
       local lspconfig = require("lspconfig")
+      lspconfig.rust_analyzer.setup { capabilities = capabilities }
+      lspconfig.gopls.setup { capabilities = capabilities }
+      -- lspconfig.golangci_lint_ls.setup { capabilities = capabilities }
       lspconfig.lua_ls.setup { capabilites = capabilities }
       -- use this or tstools
       -- lspconfig.ts_ls.setup { capabilites = capabilities }
       lspconfig.ruff.setup { capabilites = capabilities }
+      lspconfig.vtsls.setup { capabilites = capabilities }
       lspconfig.rust_analyzer.setup {
         settings = {
           ['rust-analyzer'] = {
@@ -46,6 +50,7 @@ return {
       require("mason-lspconfig").setup({
         ensure_installed = {
           "lua_ls",
+          "vtsls",
           -- "ts_ls",
           "ruff",
           "bashls",
