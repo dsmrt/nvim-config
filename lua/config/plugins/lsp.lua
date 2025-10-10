@@ -16,16 +16,14 @@ return {
     },
     config = function()
       local capabilities = require('blink.cmp').get_lsp_capabilities()
-      local lspconfig = require("lspconfig")
-      lspconfig.rust_analyzer.setup { capabilities = capabilities }
-      lspconfig.gopls.setup { capabilities = capabilities }
-      -- lspconfig.golangci_lint_ls.setup { capabilities = capabilities }
-      lspconfig.lua_ls.setup { capabilites = capabilities }
-      -- use this or tstools
-      -- lspconfig.ts_ls.setup { capabilites = capabilities }
-      lspconfig.ruff.setup { capabilites = capabilities }
-      lspconfig.vtsls.setup { capabilites = capabilities }
-      lspconfig.rust_analyzer.setup {
+      -- local lspconfig = require("lspconfig")
+      vim.lsp.config("bashls", { capabilities = capabilities })
+      vim.lsp.config("biome", { capabilities = capabilities })
+      vim.lsp.config("gopls", { capabilities = capabilities })
+      vim.lsp.config("lua_ls", { capabilities = capabilities })
+      vim.lsp.config("phpactor", { capabilities = capabilities })
+      vim.lsp.config("ruff", { capabilities = capabilities })
+      vim.lsp.config("rust_analyzer", {
         settings = {
           ['rust-analyzer'] = {
             diagnostics = {
@@ -33,18 +31,84 @@ return {
             }
           }
         }
-      }
+      })
+      vim.lsp.config("terraformls", { capabilities = capabilities })
+      vim.lsp.config("vtsls", { capabilities = capabilities })
+      vim.lsp.config("pyright", {
+        {
+          capabilities = capabilities,
+          settings = {
+            pyright = {
+              -- Using Ruff's import organizer
+              disableOrganizeImports = true,
+            },
+            python = {
+              analysis = {
+                -- Ignore all files for analysis to exclusively use Ruff for linting
+                ignore = { '*' },
+              },
+            },
+          }
+        }
+      })
+      -- vim.lsp.config({
+      --   gopls = { capabilities = capabilities },
+      -- "lua_ls = { capabilities = capabilities },
+      -- "vtsls = { capabilities = capabilities },
+      -- "rust_analyzer = {
+      --   settings = {
+      --     ['rust-analyzer'] = {
+      --       diagnostics = {
+      --         enable = false,
+      --       }
+      --     }
+      --   }
+      -- },
+      -- bashls = { capabilities = capabilities },
+      -- biome = { capabilities = capabilities },
+      -- terraformls = { capabilities = capabilities },
+      -- phpactor = { capabilities = capabilities },
+      -- })
+
+      vim.lsp.enable({
+        "bashls",
+        "biome",
+        "gopls",
+        "lua_ls",
+        "phpactor",
+        "pyright",
+        "ruff",
+        "rust_analyzer",
+        "terraformls",
+        "vtsls",
+      }, true)
+      -- lspconfig.gopls.setup { capabilities = capabilities }
+      -- lspconfig.golangci_lint_ls.setup { capabilities = capabilities }
+      -- lspconfig.lua_ls.setup { capabilites = capabilities }
+      -- use this or tstools
+      -- lspconfig.ts_ls.setup { capabilites = capabilities }
+      -- lspconfig.ruff.setup { capabilites = capabilities }
+      -- lspconfig.vtsls.setup { capabilites = capabilities }
+      -- lspconfig.rust_analyzer.setup {
+      --   settings = {
+      --     ['rust-analyzer'] = {
+      --       diagnostics = {
+      --         enable = false,
+      --       }
+      --     }
+      --   }
+      -- }
 
       -- npm i -g bash-language-server
-      lspconfig.bashls.setup { capabilites = capabilities }
+      -- lspconfig.bashls.setup { capabilites = capabilities }
 
       -- npm install [-g] @biomejs/biome
-      lspconfig.biome.setup { capabilites = capabilities }
+      -- lspconfig.biome.setup { capabilites = capabilities }
 
       -- npm i -g vscode-langservers-extracted
       -- lspconfig.jsonls.setup { capabilities = capabilities }
-      lspconfig.terraformls.setup { capabilities = capabilities }
-      lspconfig.phpactor.setup { capabilities = capabilities }
+      -- lspconfig.terraformls.setup { capabilities = capabilities }
+      -- lspconfig.phpactor.setup { capabilities = capabilities }
 
       require("mason").setup {}
       require("mason-lspconfig").setup({
