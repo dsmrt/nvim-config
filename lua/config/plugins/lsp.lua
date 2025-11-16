@@ -18,7 +18,17 @@ return {
       local capabilities = require('blink.cmp').get_lsp_capabilities()
       -- local lspconfig = require("lspconfig")
       vim.lsp.config("bashls", { capabilities = capabilities })
-      vim.lsp.config("biome", { capabilities = capabilities })
+      vim.lsp.config("biome", {
+        root_markers = { '.git' },
+        capabilities = capabilities,
+        -- settings = {
+        --   typescript = {
+        --     format = {
+        --       enable = true
+        --     }
+        --   }
+        -- }
+      })
       vim.lsp.config("gopls", { capabilities = capabilities })
       vim.lsp.config("lua_ls", { capabilities = capabilities })
       vim.lsp.config("phpactor", { capabilities = capabilities })
@@ -33,22 +43,35 @@ return {
         }
       })
       vim.lsp.config("terraformls", { capabilities = capabilities })
-      vim.lsp.config("vtsls", { capabilities = capabilities })
-      vim.lsp.config("pyright", {
-        {
-          capabilities = capabilities,
-          settings = {
-            pyright = {
-              -- Using Ruff's import organizer
-              disableOrganizeImports = true,
-            },
-            python = {
-              analysis = {
-                -- Ignore all files for analysis to exclusively use Ruff for linting
-                ignore = { '*' },
-              },
-            },
+      vim.lsp.config("vtsls", {
+        root_markers = { '.git' },
+        capabilities = capabilities,
+        settings = {
+          javascript = {
+            format = {
+              enable = false
+            }
+          },
+          typescript = {
+            format = {
+              enable = false
+            }
           }
+        }
+      })
+      vim.lsp.config("pyright", {
+        capabilities = capabilities,
+        settings = {
+          pyright = {
+            -- Using Ruff's import organizer
+            disableOrganizeImports = true,
+          },
+          python = {
+            analysis = {
+              -- Ignore all files for analysis to exclusively use Ruff for linting
+              ignore = { '*' },
+            },
+          },
         }
       })
       -- vim.lsp.config({
@@ -80,7 +103,7 @@ return {
         "ruff",
         "rust_analyzer",
         "terraformls",
-        "vtsls",
+        -- "vtsls",
       }, true)
       -- lspconfig.gopls.setup { capabilities = capabilities }
       -- lspconfig.golangci_lint_ls.setup { capabilities = capabilities }
@@ -125,27 +148,62 @@ return {
         }
       })
 
+
       vim.api.nvim_create_autocmd('LspAttach', {
         callback = function(args)
-          local c = vim.lsp.get_client_by_id(args.data.client_id)
-          if not c then return end
+          local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+          -- vim.keymap.set('n', 'grn', vim.lsp.buf.rename)
+          -- vim.keymap.set('n', 'gra', vim.lsp.buf.code_action)
+          -- vim.keymap.set('n', 'grr', vim.lsp.buf.references)
+          -- vim.keymap.set('i', '<C-s>', vim.lsp.buf.signature_help)
+          -- vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { noremap = true, silent = true })
+          -- vim.keymap.set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true })
+          -- if client:supports_method('textDocument/implementation') then
+          --   -- Create a keymap for vim.lsp.buf.implementation ...
+          -- end
+          --
+          -- -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
+          -- if client:supports_method('textDocument/completion') then
+          --   -- Optional: trigger autocompletion on EVERY keypress. May be slow!
+          --   -- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
+          --   -- client.server_capabilities.completionProvider.triggerCharacters = chars
+          --
+          --   vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+          -- end
 
-          vim.keymap.set('n', 'grn', vim.lsp.buf.rename)
-          vim.keymap.set('n', 'gra', vim.lsp.buf.code_action)
-          vim.keymap.set('n', 'grr', vim.lsp.buf.references)
-          vim.keymap.set('i', '<C-s>', vim.lsp.buf.signature_help)
-          vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { noremap = true, silent = true })
-          vim.keymap.set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true })
-
-          -- Format the current buffer on save
+          -- Auto-format ("lint") on save.
+          -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
+          -- if client:supports_method('textDocument/formatting') then
           vim.api.nvim_create_autocmd('BufWritePre', {
             buffer = args.buf,
             callback = function()
-              vim.lsp.buf.format({ bufnr = args.buf, id = c.id })
+              vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
             end,
           })
+          -- end
         end,
       })
+      -- vim.api.nvim_create_autocmd('LspAttach', {
+      --   callback = function(args)
+      --     local c = vim.lsp.get_client_by_id(args.data.client_id)
+      --     if not c then return end
+      --
+      --     vim.keymap.set('n', 'grn', vim.lsp.buf.rename)
+      --     vim.keymap.set('n', 'gra', vim.lsp.buf.code_action)
+      --     vim.keymap.set('n', 'grr', vim.lsp.buf.references)
+      --     vim.keymap.set('i', '<C-s>', vim.lsp.buf.signature_help)
+      --     vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { noremap = true, silent = true })
+      --     vim.keymap.set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true })
+      --
+      --     -- Format the current buffer on save
+      --     vim.api.nvim_create_autocmd('BufWritePre', {
+      --       buffer = args.buf,
+      --       callback = function()
+      --         vim.lsp.buf.format({ bufnr = args.buf, id = c.id })
+      --       end,
+      --     })
+      --   end,
+      -- })
     end,
   }
 }
