@@ -33,6 +33,7 @@ return {
       vim.lsp.config("lua_ls", { capabilities = capabilities })
       vim.lsp.config("phpactor", { capabilities = capabilities })
       vim.lsp.config("ruff", { capabilities = capabilities })
+      -- vim.lsp.config("tailwindcss", { capabilities = capabilities })
       vim.lsp.config("rust_analyzer", {
         settings = {
           ['rust-analyzer'] = {
@@ -103,6 +104,7 @@ return {
         "ruff",
         "rust_analyzer",
         "terraformls",
+        "tailwindcss",
         -- "vtsls",
       }, true)
       -- lspconfig.gopls.setup { capabilities = capabilities }
