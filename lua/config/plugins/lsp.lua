@@ -31,7 +31,12 @@ return {
       })
       vim.lsp.config("gopls", { capabilities = capabilities })
       vim.lsp.config("lua_ls", { capabilities = capabilities })
-      vim.lsp.config("phpactor", { capabilities = capabilities })
+      vim.lsp.config("phpactor", {
+        capabilities = capabilities,
+        cmd = { vim.fn.expand("~/.local/share/nvim/mason/bin/phpactor"), "language-server" },
+        root_markers = { "composer.json", ".git", ".phpactor.json", ".phpactor.yml" },
+        filetypes = { "php" },
+      })
       vim.lsp.config("ruff", { capabilities = capabilities })
       -- vim.lsp.config("tailwindcss", { capabilities = capabilities })
       vim.lsp.config("rust_analyzer", {
@@ -175,14 +180,21 @@ return {
 
           -- Auto-format ("lint") on save.
           -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
-          -- if client:supports_method('textDocument/formatting') then
-          vim.api.nvim_create_autocmd('BufWritePre', {
-            buffer = args.buf,
-            callback = function()
-              vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
-            end,
-          })
-          -- end
+          -- Skip formatting for file types handled by conform.nvim
+          if client:supports_method('textDocument/formatting') then
+            local filetype = vim.api.nvim_get_option_value('filetype', { buf = args.buf })
+            local conform_filetypes = { 'php', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'json', 'jsonc' }
+            local use_conform = vim.tbl_contains(conform_filetypes, filetype)
+
+            if not use_conform then
+              vim.api.nvim_create_autocmd('BufWritePre', {
+                buffer = args.buf,
+                callback = function()
+                  vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
+                end,
+              })
+            end
+          end
         end,
       })
       -- vim.api.nvim_create_autocmd('LspAttach', {
