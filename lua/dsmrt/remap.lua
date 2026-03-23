@@ -9,6 +9,11 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
+vim.keymap.set('n', '<leader>grn', vim.lsp.buf.rename)
+vim.keymap.set('n', '<leader>gra', vim.lsp.buf.code_action)
+vim.keymap.set('n', '<leader>grr', vim.lsp.buf.references)
+
+
 -- auto completion
 -- vim.keymap.set("i", "<Tab>", "<C-n>")
 -- vim.keymap.set("i", "<S-Tab>", "<C-p>")
